@@ -44,6 +44,6 @@ steps:
   inputs:
     command: package
     #chartPath: Application/charts/mynginx2
-    chartPath: /charts
+    chartPath: ./charts/mynginx2
     destination: $(Build.ArtifactStagingDirectory)
 
