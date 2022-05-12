@@ -55,7 +55,7 @@ steps:
     chartNameForACR: $(containerRegistry)/test/mynginx2:0.1.3
     #chartPathForACR: Application/charts/sampleapp
     chartPathForACR: ./charts/mynginx2
-    azureSubscriptionEndpointForACR: $(dockerRegistryServiceConnection)
+    azureSubscriptionEndpointForACR: $(k8sServiceConnection)
     azureResourceGroupForACR: $(azureResourceGroupForACR)
     azureContainerRegistry: $(containerRegistry)
 
