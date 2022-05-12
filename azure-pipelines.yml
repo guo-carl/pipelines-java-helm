@@ -35,6 +35,14 @@ steps:
     goals: 'package'
 
 - task: HelmInstaller@1
-  displayName: Helm installer
+  displayName: Helm 3.7.2 installer
   inputs:
     helmVersionToInstall: 3.7.2
+
+- task: HelmDeploy@0
+  displayName: Helm package
+  inputs:
+    command: package
+    chartPath: Application/charts/mynginx2
+    destination: $(Build.ArtifactStagingDirectory)
+
