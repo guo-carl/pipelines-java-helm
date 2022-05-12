@@ -12,6 +12,7 @@ trigger:
 variables:
   # Container registry service connection established during pipeline creation // 'dvue2-acr-evue2dsoacr-sc'
   dockerRegistryServiceConnection:  'dvue-acr-evuedsoacr-sc'
+  azureResourceGroupForACR:  'dvue-acr-rg'
   # e.g.  nginx
   imageRepository: 'ava/guoyang/test/test-tomcat'
   containerRegistry: 'evuedsoacr.azurecr.io'
@@ -46,4 +47,19 @@ steps:
     #chartPath: Application/charts/mynginx2
     chartPath: ./charts/mynginx2
     destination: $(Build.ArtifactStagingDirectory)
+
+- task: HelmDeploy@0
+  displayName: Helm save
+  inputs:
+    command: save
+    chartNameForACR: $(containerRegistry)/test/mynginx2:0.1.3
+    #chartPathForACR: Application/charts/sampleapp
+    chartPathForACR: ./charts/mynginx2
+    azureSubscriptionEndpointForACR: $(dockerRegistryServiceConnection)
+    azureResourceGroupForACR: $(azureResourceGroupForACR)
+    azureContainerRegistry: $(containerRegistry)
+
+
+
+
 
