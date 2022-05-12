@@ -61,7 +61,7 @@ steps:
     azureContainerRegistry: $(containerRegistry)
     connectionType: Kubernetes Service Connection
     kubernetesServiceEndpoint: $(k8sServiceConnection)
-
+    arguments: aa bb
 
 
 
