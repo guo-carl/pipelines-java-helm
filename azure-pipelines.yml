@@ -43,6 +43,7 @@ steps:
   displayName: Helm package
   inputs:
     command: package
-    chartPath: Application/charts/mynginx2
+    #chartPath: Application/charts/mynginx2
+    chartPath: /charts
     destination: $(Build.ArtifactStagingDirectory)
 
