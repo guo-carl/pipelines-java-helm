@@ -36,9 +36,9 @@ steps:
     goals: 'package'
 
 - task: HelmInstaller@1
-  displayName: Helm 3.7.2 installer
+  displayName: Helm 3.8.0 installer
   inputs:
-    helmVersionToInstall: 3.7.2
+    helmVersionToInstall: 3.8.0
 
 - task: HelmDeploy@0
   displayName: Helm package
