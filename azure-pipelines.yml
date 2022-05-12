@@ -61,7 +61,7 @@ steps:
     azureContainerRegistry: $(containerRegistry)
     connectionType: Kubernetes Service Connection
     kubernetesServiceEndpoint: $(k8sServiceConnection)
-    arguments: aa bb
+    arguments: mynginx2-0.1.3.tgz oci://$(containerRegistry)/helm/test
 
 
 
