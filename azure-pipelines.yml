@@ -55,10 +55,11 @@ steps:
     chartNameForACR: $(containerRegistry)/test/mynginx2:0.1.3
     #chartPathForACR: Application/charts/sampleapp
     chartPathForACR: ./charts/mynginx2
-    azureSubscriptionEndpointForACR: $(k8sServiceConnection)
-    azureResourceGroupForACR: $(azureResourceGroupForACR)
+#    azureSubscriptionEndpointForACR: $(k8sServiceConnection)
+#    azureResourceGroupForACR: $(azureResourceGroupForACR)
     azureContainerRegistry: $(containerRegistry)
-
+    connectionType: Kubernetes Service Connection
+    kubernetesServiceEndpoint: $(k8sServiceConnection)
 
 
 
