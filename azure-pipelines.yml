@@ -49,11 +49,38 @@ steps:
     chartPath: ./charts/mynginx2
     destination: $(Build.ArtifactStagingDirectory)
 
-- task: Docker@2
-  displayName: Login to ACR
+- task: HelmDeploy@0
+  displayName: Helm upgrade
   inputs:
-    command: login
-    containerRegistry: $(dockerRegistryServiceConnection)
+#    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+#    azureResourceGroup: $(azureResourceGroup)
+#    kubernetesCluster: $(kubernetesCluster)
+    connectionType: 'Kubernetes Service Connection'
+    kubernetesServiceConnection: 'k8s_connection_dvueappaks2'
+    namespace: 'pipeline-dev'
+    command: upgrade
+    chartType: filepath
+    chartPath: $(Build.ArtifactStagingDirectory)/mynginx2-0.1.3.tgz
+    releaseName: mynginx2demo
+    install: true
+    waitForExecution: false
+#- task: HelmDeploy@0
+#  inputs:
+#    connectionType: 'Kubernetes Service Connection'
+#    kubernetesServiceConnection: 'k8s_connection_dvueappaks2'
+#    namespace: 'pipeline-dev'
+#    command: 'install'
+#    chartType: 'Name'
+#    chartName: 'chartname'
+#    chartVersion: 'version'
+#    releaseName: 'release'
+#    overrideValues: 'key1=val1,key2=val2'
+
+#- task: Docker@2
+#  displayName: Login to ACR
+#  inputs:
+#    command: login
+#    containerRegistry: $(dockerRegistryServiceConnection)
 
 - script: pwd
   displayName: list current folder
@@ -63,46 +90,46 @@ steps:
   #    echo 1
   #    az acr login --name $ACR_NAME
 #  az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken
-
-- script: |
-    echo 0
-    az acr token create -n $USER_NAME -r $ACR_NAME --scope-map _repositories_admin --only-show-errors --query "credentials.passwords[0].value" -o tsv
-    echo 1
-    echo $ACR_NAME
-    echo $USER_NAME
-    echo 2
-    echo $PASSWORD
-    echo 3
-    helm registry login $ACR_NAME.azurecr.io  --username $USER_NAME  --password $PASSWORD
-    echo 4
-  displayName: helm login
-  env:
-    HELM_EXPERIMENTAL_OCI: 1
-    ACR_NAME: $(acrName)
-    USER_NAME: "helm-token"
-    PASSWORD: "123"
-
-- task: HelmDeploy@0
-  displayName: Helm save
-  inputs:
-    command: push
-#    chartNameForACR: $(containerRegistry)/test/mynginx2:0.1.3
-    chartNameForACR: test/mynginx2:0.1.3
-    #chartPathForACR: Application/charts/sampleapp
-    chartPathForACR: ./charts/mynginx2
-#    azureSubscriptionEndpointForACR: $(k8sServiceConnection)
-#    azureResourceGroupForACR: $(azureResourceGroupForACR)
-    azureContainerRegistry: $(containerRegistry)
-    connectionType: Kubernetes Service Connection
-    kubernetesServiceEndpoint: $(k8sServiceConnection)
-    arguments: $(Build.ArtifactStagingDirectory)/mynginx2-0.1.3.tgz oci://$(containerRegistry)/helm/test
-  env:
-    HELM_EXPERIMENTAL_OCI: 1
-
-
-- task: Docker@2
-  displayName: Logout of ACR
-  inputs:
-    command: logout
-    containerRegistry: $(dockerRegistryServiceConnection)
+#
+#- script: |
+#    echo 0
+#    az acr token create -n $USER_NAME -r $ACR_NAME --scope-map _repositories_admin --only-show-errors --query "credentials.passwords[0].value" -o tsv
+#    echo 1
+#    echo $ACR_NAME
+#    echo $USER_NAME
+#    echo 2
+#    echo $PASSWORD
+#    echo 3
+#    helm registry login $ACR_NAME.azurecr.io  --username $USER_NAME  --password $PASSWORD
+#    echo 4
+#  displayName: helm login
+#  env:
+#    HELM_EXPERIMENTAL_OCI: 1
+#    ACR_NAME: $(acrName)
+#    USER_NAME: "helm-token"
+#    PASSWORD: "123"
+#
+#- task: HelmDeploy@0
+#  displayName: Helm save
+#  inputs:
+#    command: push
+##    chartNameForACR: $(containerRegistry)/test/mynginx2:0.1.3
+#    chartNameForACR: test/mynginx2:0.1.3
+#    #chartPathForACR: Application/charts/sampleapp
+#    chartPathForACR: ./charts/mynginx2
+##    azureSubscriptionEndpointForACR: $(k8sServiceConnection)
+##    azureResourceGroupForACR: $(azureResourceGroupForACR)
+#    azureContainerRegistry: $(containerRegistry)
+#    connectionType: Kubernetes Service Connection
+#    kubernetesServiceEndpoint: $(k8sServiceConnection)
+#    arguments: $(Build.ArtifactStagingDirectory)/mynginx2-0.1.3.tgz oci://$(containerRegistry)/helm/test
+#  env:
+#    HELM_EXPERIMENTAL_OCI: 1
+#
+#
+#- task: Docker@2
+#  displayName: Logout of ACR
+#  inputs:
+#    command: logout
+#    containerRegistry: $(dockerRegistryServiceConnection)
 
