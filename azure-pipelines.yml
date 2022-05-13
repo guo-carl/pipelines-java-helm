@@ -16,6 +16,7 @@ variables:
   # e.g.  nginx
   imageRepository: 'ava/guoyang/test/test-tomcat'
   containerRegistry: 'evuedsoacr.azurecr.io'
+  acrName: 'evuedsoacr'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   k8sServiceConnection: 'k8s_connection_dvueappaks2'
   k8sNamespace: 'pipeline-dev'
@@ -48,17 +49,19 @@ steps:
     chartPath: ./charts/mynginx2
     destination: $(Build.ArtifactStagingDirectory)
 
-- script: date
-  displayName: Get the date
-- script: dir
-  workingDirectory: $(Agent.BuildDirectory)
-  displayName: List contents of a folder
+- script: pwd
+  displayName: list current folder
+#- script: dir
+#  workingDirectory: $(Agent.BuildDirectory)
+#  displayName: List contents of a folder
 - script: |
-    set MYVAR=foo
-    set
-  displayName: Set a variable and then display all
+    az acr login --name $ACR_NAME
+    PASSWORD=$(az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken)
+    helm registry login $ACR_NAME.azurecr.io  --username $USER_NAME  --password $PASSWORD
+  displayName: helm login
   env:
-    aVarFromYaml: someValue
+    ACR_NAME: $(acrName)
+    USER_NAME: "00000000-0000-0000-0000-000000000000"
 
 - task: HelmDeploy@0
   displayName: Helm save
