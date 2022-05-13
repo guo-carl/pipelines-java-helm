@@ -64,13 +64,11 @@ steps:
   #    az acr login --name $ACR_NAME
 - script: |
     echo 0
-    ACR_NAME= $(acrName)
-    USER_NAME= "00000000-0000-0000-0000-000000000000"
-    echo $ACR_NAME
+    az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken
     echo 1
+    echo $ACR_NAME
     echo $USER_NAME
     echo 2
-    PASSWORD=$(az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken)
     echo $PASSWORD
     echo 3
     helm registry login $ACR_NAME.azurecr.io  --username $USER_NAME  --password $PASSWORD
@@ -79,6 +77,7 @@ steps:
   env:
     ACR_NAME: $(acrName)
     USER_NAME: "00000000-0000-0000-0000-000000000000"
+    PASSWORD: "123"
 
 - task: HelmDeploy@0
   displayName: Helm save
