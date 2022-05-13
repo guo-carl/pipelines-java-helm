@@ -48,6 +48,7 @@ steps:
     #chartPath: Application/charts/mynginx2
     chartPath: ./charts/mynginx2
     destination: $(Build.ArtifactStagingDirectory)
+    version: 1.$(Build.BuildId)
 
 - task: HelmDeploy@0
   inputs:
@@ -94,8 +95,8 @@ steps:
 #    command: login
 #    containerRegistry: $(dockerRegistryServiceConnection)
 
-- script: pwd
-  displayName: list current folder
+#- script: pwd
+#  displayName: list current folder
 #- script: dir
 #  workingDirectory: $(Agent.BuildDirectory)
 #  displayName: List contents of a folder
