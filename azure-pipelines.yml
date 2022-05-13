@@ -63,6 +63,12 @@ steps:
   #    echo 1
   #    az acr login --name $ACR_NAME
 - script: |
+    echo 0
+    ACR_NAME= $(acrName)
+    USER_NAME= "00000000-0000-0000-0000-000000000000"
+    echo $ACR_NAME
+    echo 1
+    echo $USER_NAME
     echo 2
     PASSWORD=$(az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken)
     echo $PASSWORD
