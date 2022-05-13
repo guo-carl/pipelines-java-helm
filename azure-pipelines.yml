@@ -55,9 +55,14 @@ steps:
 #  workingDirectory: $(Agent.BuildDirectory)
 #  displayName: List contents of a folder
 - script: |
+    echo 1
     az acr login --name $ACR_NAME
+    echo 2
     PASSWORD=$(az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken)
+    echo $PASSWORD
+    echo 3
     helm registry login $ACR_NAME.azurecr.io  --username $USER_NAME  --password $PASSWORD
+    echo 4
   displayName: helm login
   env:
     ACR_NAME: $(acrName)
