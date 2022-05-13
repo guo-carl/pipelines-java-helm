@@ -48,7 +48,7 @@ steps:
     chartPath: ./charts/mynginx2
     destination: $(Build.ArtifactStagingDirectory)
 
-- script: date /t
+- script: date
   displayName: Get the date
 - script: dir
   workingDirectory: $(Agent.BuildDirectory)
