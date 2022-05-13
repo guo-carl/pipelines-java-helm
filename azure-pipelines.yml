@@ -62,9 +62,11 @@ steps:
 #  displayName: List contents of a folder
   #    echo 1
   #    az acr login --name $ACR_NAME
+#  az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken
+
 - script: |
     echo 0
-    az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken
+    az acr token create -n $USER_NAME -r $ACR_NAME --scope-map _repositories_admin --only-show-errors --query "credentials.passwords[0].value" -o tsv
     echo 1
     echo $ACR_NAME
     echo $USER_NAME
@@ -75,8 +77,9 @@ steps:
     echo 4
   displayName: helm login
   env:
+    HELM_EXPERIMENTAL_OCI: 1
     ACR_NAME: $(acrName)
-    USER_NAME: "00000000-0000-0000-0000-000000000000"
+    USER_NAME: "helm-token"
     PASSWORD: "123"
 
 - task: HelmDeploy@0
