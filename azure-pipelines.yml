@@ -68,7 +68,7 @@ steps:
     namespace: 'pipeline-dev'
     command: upgrade
     chartType: filepath
-    chartPath: $(Build.ArtifactStagingDirectory)/mynginx2-0.1.3.tgz
+    chartPath: $(Build.ArtifactStagingDirectory)/mynginx2-1.$(Build.BuildId).tgz
     releaseName: mynginx2demo
     install: true
     waitForExecution: false
