@@ -49,6 +49,7 @@ steps:
     chartPath: ./charts/mynginx2
     destination: $(Build.ArtifactStagingDirectory)
     version: 1.$(Build.BuildId)
+    arguments: --app-version 2.$(Build.BuildId)
 
 - task: HelmDeploy@0
   inputs:
