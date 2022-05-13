@@ -60,9 +60,9 @@ steps:
 #- script: dir
 #  workingDirectory: $(Agent.BuildDirectory)
 #  displayName: List contents of a folder
+  #    echo 1
+  #    az acr login --name $ACR_NAME
 - script: |
-#    echo 1
-#    az acr login --name $ACR_NAME
     echo 2
     PASSWORD=$(az acr login --name $ACR_NAME --expose-token --output tsv --query accessToken)
     echo $PASSWORD
