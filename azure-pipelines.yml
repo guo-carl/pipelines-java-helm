@@ -14,7 +14,8 @@ variables:
   dockerRegistryServiceConnection:  'dvue-acr-evuedsoacr-sc'
   azureResourceGroupForACR:  'dvue-acr-rg'
   # e.g.  nginx
-  imageRepository: 'ava/guoyang/test/test-tomcat'
+  imageRepository: 'ava/guoyang/test/helm-tomcat-helloworld'
+  imageName: 'helm-tomcat-helloworld'
   containerRegistry: 'evuedsoacr.azurecr.io'
   acrName: 'evuedsoacr'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
@@ -36,6 +37,36 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 
+
+- task: Docker@2
+  displayName: Build an image
+  inputs:
+    repository: $(containerRegistry)/$(imageRepository)
+    command: build
+    Dockerfile: ./Dockerfile
+
+- task: Docker@2
+  displayName: Login to ACR
+  inputs:
+    command: login
+    containerRegistry: $(dockerRegistryServiceConnection)
+
+- task: Docker@2
+  displayName: Push image
+  inputs:
+    containerRegistry: $(dockerRegistryServiceConnection)
+    repository: $(imageRepository)
+    command: push
+    tags: |
+      $(tag)
+
+- task: Docker@2
+  displayName: Logout of ACR
+  inputs:
+    command: logout
+    containerRegistry: $(dockerRegistryServiceConnection)
+
+
 - task: HelmInstaller@1
   displayName: Helm 3.7.2 installer
   inputs:
@@ -46,10 +77,10 @@ steps:
   inputs:
     command: package
     #chartPath: Application/charts/mynginx2
-    chartPath: ./charts/mynginx2
+    chartPath: ./charts/$(imageName)
     destination: $(Build.ArtifactStagingDirectory)
-    version: 1.$(Build.BuildId)
-#    arguments: --app-version 2.$(Build.BuildId)
+    version: 1.0.$(Build.BuildId)
+    arguments: --app-version 1.$(Build.BuildId)
 
 - task: HelmDeploy@0
   inputs:
@@ -69,8 +100,8 @@ steps:
     namespace: 'pipeline-dev'
     command: upgrade
     chartType: filepath
-    chartPath: $(Build.ArtifactStagingDirectory)/mynginx2-1.$(Build.BuildId).tgz
-    releaseName: mynginx2demo
+    chartPath: $(Build.ArtifactStagingDirectory)/$(imageName)-1.$(Build.BuildId).tgz
+    releaseName: $(imageName)
     install: true
     waitForExecution: false
 
