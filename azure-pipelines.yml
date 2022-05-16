@@ -80,7 +80,7 @@ steps:
     chartPath: ./charts/$(imageName)
     destination: $(Build.ArtifactStagingDirectory)
     version: 1.0.$(Build.BuildId)
-    arguments: --app-version 1.$(Build.BuildId)
+    arguments: --app-version $(Build.BuildId)
 
 - task: HelmDeploy@0
   inputs:
@@ -100,7 +100,7 @@ steps:
     namespace: 'pipeline-dev'
     command: upgrade
     chartType: filepath
-    chartPath: $(Build.ArtifactStagingDirectory)/$(imageName)-1.$(Build.BuildId).tgz
+    chartPath: $(Build.ArtifactStagingDirectory)/$(imageName)-1.0.$(Build.BuildId).tgz
     releaseName: $(imageName)
     install: true
     waitForExecution: false
