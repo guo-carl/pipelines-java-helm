@@ -27,6 +27,7 @@ variables:
 
 steps:
 - task: Maven@3
+  displayName: Maven package
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
@@ -39,7 +40,7 @@ steps:
 
 
 - task: Docker@2
-  displayName: Build an image
+  displayName: Build an Docker image
   inputs:
     repository: $(containerRegistry)/$(imageRepository)
     command: build
@@ -83,6 +84,7 @@ steps:
     arguments: --app-version $(Build.BuildId)
 
 - task: HelmDeploy@0
+  displayName: Helm login
   inputs:
     connectionType: 'Kubernetes Service Connection'
     kubernetesServiceConnection: 'k8s_connection_dvueappaks2'
@@ -90,7 +92,7 @@ steps:
     command: 'login'
 
 - task: HelmDeploy@0
-  displayName: Helm upgrade
+  displayName: Helm install/upgrade
   inputs:
 #    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
 #    azureResourceGroup: $(azureResourceGroup)
@@ -106,6 +108,7 @@ steps:
     waitForExecution: false
 
 - task: HelmDeploy@0
+  displayName: Helm logout
   inputs:
     command: 'logout'
 
