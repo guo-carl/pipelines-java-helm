@@ -87,8 +87,8 @@ steps:
   displayName: Helm login
   inputs:
     connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceConnection: 'k8s_connection_dvueappaks2'
-    namespace: 'pipeline-dev'
+    kubernetesServiceConnection: $(k8sServiceConnection)
+    namespace: $(k8sNamespace)
     command: 'login'
 
 - task: HelmDeploy@0
@@ -98,8 +98,8 @@ steps:
 #    azureResourceGroup: $(azureResourceGroup)
 #    kubernetesCluster: $(kubernetesCluster)
     connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceConnection: 'k8s_connection_dvueappaks2'
-    namespace: 'pipeline-dev'
+    kubernetesServiceConnection: $(k8sServiceConnection)
+    namespace: $(k8sNamespace)
     command: upgrade
     chartType: filepath
     chartPath: $(Build.ArtifactStagingDirectory)/$(imageName)-1.0.$(Build.BuildId).tgz
