@@ -19,8 +19,8 @@ variables:
   containerRegistry: 'evuedsoacr.azurecr.io'
   acrName: 'evuedsoacr'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
-  k8sServiceConnection: 'k8s_ns_ava-labeling'
-  k8sNamespace: 'ava-labeling'
+  k8sServiceConnection: 'k8s_connection_dvueappaks2'
+  k8sNamespace: 'pipeline-dev'
   k8sImagePullSecrets: 'pipeline-deploy'
   tag: '$(Build.BuildId)'
 
