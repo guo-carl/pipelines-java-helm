@@ -91,21 +91,34 @@ steps:
     namespace: $(k8sNamespace)
     command: 'login'
 
+#- task: HelmDeploy@0
+#  displayName: Helm install/upgrade
+#  inputs:
+##x    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+##x    azureResourceGroup: $(azureResourceGroup)
+##x    kubernetesCluster: $(kubernetesCluster)
+#    connectionType: 'Kubernetes Service Connection'
+#    kubernetesServiceConnection: $(k8sServiceConnection)
+#    namespace: $(k8sNamespace)
+#    command: upgrade
+#    chartType: filepath
+#    chartPath: $(Build.ArtifactStagingDirectory)/$(imageName)-1.0.$(Build.BuildId).tgz
+#    releaseName: $(imageName)
+#    install: true
+#    waitForExecution: false
+
 - task: HelmDeploy@0
-  displayName: Helm install/upgrade
-  inputs:
-#    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-#    azureResourceGroup: $(azureResourceGroup)
-#    kubernetesCluster: $(kubernetesCluster)
-    connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceConnection: $(k8sServiceConnection)
-    namespace: $(k8sNamespace)
-    command: upgrade
-    chartType: filepath
-    chartPath: $(Build.ArtifactStagingDirectory)/$(imageName)-1.0.$(Build.BuildId).tgz
-    releaseName: $(imageName)
-    install: true
-    waitForExecution: false
+   displayName: Helm uninstall
+   inputs:
+   connectionType: 'Kubernetes Service Connection'
+   kubernetesServiceConnection: $(k8sServiceConnection)
+   namespace: $(k8sNamespace)
+   command: uninstall
+   chartType: filepath
+   chartPath: $(Build.ArtifactStagingDirectory)/$(imageName)-1.0.$(tag).tgz
+   releaseName: $(imageName)
+   waitForExecution: false
+   arguments: $(imageName)
 
 - task: HelmDeploy@0
   displayName: Helm logout
