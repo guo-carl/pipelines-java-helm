@@ -108,17 +108,17 @@ steps:
 #    waitForExecution: false
 
 - task: HelmDeploy@0
-   displayName: Helm uninstall
-   inputs:
-   connectionType: 'Kubernetes Service Connection'
-   kubernetesServiceConnection: $(k8sServiceConnection)
-   namespace: $(k8sNamespace)
-   command: uninstall
-   chartType: filepath
-   chartPath: $(Build.ArtifactStagingDirectory)/$(imageName)-1.0.$(tag).tgz
-   releaseName: $(imageName)
-   waitForExecution: false
-   arguments: $(imageName)
+  displayName: Helm uninstall
+  inputs:
+    connectionType: 'Kubernetes Service Connection'
+    kubernetesServiceConnection: $(k8sServiceConnection)
+    namespace: $(k8sNamespace)
+    command: uninstall
+    chartType: filepath
+    chartPath: $(Build.ArtifactStagingDirectory)/$(imageName)-1.0.$(tag).tgz
+    releaseName: $(imageName)
+    waitForExecution: false
+    arguments: $(imageName)
 
 - task: HelmDeploy@0
   displayName: Helm logout
