@@ -28,7 +28,7 @@ public class Demo {
             } else if (a == 9) {
                 a = 10;
             }
-            println(a);
+           System.out.println(a);
         System.out.println("I am not covered");
     }
 }
